@@ -40,10 +40,6 @@ secretsGenerator = secrets.SystemRandom()
 #Création de notre alphabet
 alphabet = list(string.ascii_uppercase)
 
-#On converti l'input attendu en majuscule et on retire les espaces
-stringToCipher = input("Entrez votre message à chiffrer :\n").upper().replace(
-    " ", "")
-
 print(
     "Utiliser Ctrl+C afin d'activer le mode [INFO] pour suivre le processus de chiffrement. Sinon attendez 5sec..."
 )
@@ -53,18 +49,24 @@ except KeyboardInterrupt:
     info = True
     print('\n\nLe mode [INFO] a été activé!\n\n')
 
-#Nettoyage de la chaine en paramètre
+#On converti l'input attendu en majuscule et on la nettoie
+stringToCipher = input("Entrez votre message à chiffrer :\n").upper().replace(
+    " ", "")
 if (info):
     print("Chaîne de caractères nettoyé :\n", *stringToCipher)
 
+#Création de notre clé
 while (len(key) != len(stringToCipher)):
+    #On mélange notre alphabet
     secretsGenerator.shuffle(alphabet)
+    #On choisit aléatoirement notre lettre
     key.append(secretsGenerator.choice(alphabet))
     if (info):
         print("\n", len(key), " iteration.\Après shuffle: ")
         print(*alphabet)
         print(key[len(key) - 1], " sera un élément de la clé!\n")
 
+#Création de notre cipher
 for i in range(len(key)):
     a = ascii_to_alphabet_int(stringToCipher[i])
     b = ascii_to_alphabet_int(key[i])
@@ -75,5 +77,6 @@ for i in range(len(key)):
             ascii_to_alphabet_int(stringToCipher[i]), " ",
             ascii_to_alphabet_int(key[i]), " ", cipher[i])
 
+#Fin de traitement - affichage de la clé et du cipher
 print("\n\nCipher: ", *cipher)
 print("Key: ", *key)
